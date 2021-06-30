@@ -1,33 +1,264 @@
-import React from "react";
+import React, { useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
-
+import MenuItem from "@material-ui/core/MenuItem";
+import Button from "@material-ui/core/Button";
+import axios from "axios";
+import { backendLink } from "../keys";
 const useStyles = makeStyles((theme) => ({
   root: {
-    "& > *": {
+    "& .MuiTextField-root": {
       margin: theme.spacing(1),
       width: "25ch",
     },
   },
 }));
 
-function UnityForm() {
+function UnityForm(props) {
   const classes = useStyles();
+  const setToken = props.setToken;
+  const setUsername = props.setUsername;
+
+  const [errorUsername, setErrorUsername] = useState(false);
+  const [errorPassword, setErrorPassword] = useState(false);
+  const [errorGender, setErrorGender] = useState(false);
+  const [errorEducation, setErrorEducation] = useState(false);
+  const [errorBirthyear, setErrorBirthyear] = useState(false);
+  const [errors, setErrors] = useState({});
+
+  var data = {};
+
+  function submitUser(e) {
+    if (!data.username) {
+      setErrorUsername(true);
+    }
+    if (!data.password) {
+      setErrorPassword(true);
+    }
+    if (!data.gender) {
+      setErrorGender(true);
+    }
+    if (!data.birthyear) {
+      setErrorBirthyear(true);
+    }
+    if (!data.education) {
+      setErrorEducation(true);
+    }
+    if (
+      data.username &&
+      data.password &&
+      data.gender &&
+      data.birthyear &&
+      data.education
+    ) {
+      axios({
+        method: "POST",
+        url: `${backendLink}/user/addUser`,
+        data: {
+          gender: data.gender,
+          birthYear: data.birthyear,
+          educationalLevel: data.education,
+          mentalIllness: data.mental,
+          notes: data.notes,
+          username: data.username,
+          password: data.password,
+          caffiene: data.caffiene,
+        },
+      })
+        .then((res) => {
+          if (res.data.statusCode === "000") {
+            setToken(res.data.token);
+            setUsername(res.data.user.username);
+          } else {
+            console.log(res.data.statusCode);
+          }
+        })
+        .catch((err) => console.log(err));
+    }
+    e.preventDefault();
+  }
+
+  // useEffect(() => {
+  //   setErrors(errors);
+  // }, [errors]);
+
+  function handleChange(key, value) {
+    data[key] = value;
+  }
+
   return (
     <div>
-      <h1>
-        Welcome to the game
-        <br /> Urban Joy!
-      </h1>
-      <h3>
-        This game was developed as part of a bachelor project at the German
-        University in Cairo in 2021. If you consent to it, your game performance
-        will be collected and analysed for educational purposes. Please fill in
-        the following form to start playing.
-      </h3>
-      <form className={classes.root} noValidate autoComplete="off">
-        <TextField id="standard-basic" label="Standard" />
-      </form>
+      <div
+        style={{
+          backgroundColor: "#203904",
+          paddingTop: "2vw",
+          paddingBottom: "2vw",
+        }}
+      >
+        <form className={classes.root} onSubmit={(e) => submitUser(e)}>
+          <table
+            style={{
+              width: "70%",
+              textAlign: "center",
+              marginLeft: "15%",
+              marginRight: "15%",
+            }}
+          >
+            <tbody>
+              <tr>
+                <td>
+                  <TextField
+                    id="standard-basic"
+                    label="Username"
+                    helperText="Please enter a random username and memorize it to use later"
+                    style={{ width: "80%", textAlign: "center" }}
+                    error={errorUsername}
+                    required
+                    defaultValue={data.username}
+                    onChange={(e) => handleChange("username", e.target.value)}
+                  />
+                </td>
+                <td>
+                  <TextField
+                    id="standard-basic"
+                    label="Password"
+                    type="password"
+                    helperText="Please enter a random/trivial password and memorize it to use later"
+                    style={{ width: "80%", textAlign: "center" }}
+                    error={errors.password ? true : false}
+                    required
+                    onChange={(e) => handleChange("password", e.target.value)}
+                  />
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <TextField
+                    id="standard-select-currency"
+                    select
+                    label="Gender"
+                    helperText="Please select your gender"
+                    style={{ width: "80%", textAlign: "center" }}
+                    error={errors.gender}
+                    required
+                    onChange={(e) => handleChange("gender", e.target.value)}
+                  >
+                    <MenuItem key={"female"} value={"female"}>
+                      Female
+                    </MenuItem>
+                    <MenuItem key={"male"} value={"male"}>
+                      Male
+                    </MenuItem>
+                    <MenuItem key={"other"} value={"perfer not to disclose"}>
+                      Prefer Not To Disclose
+                    </MenuItem>
+                  </TextField>
+                </td>
+                <td>
+                  <TextField
+                    id="standard-select-currency"
+                    select
+                    label="Educational Level"
+                    helperText="Please select your educational level"
+                    style={{ width: "80%", textAlign: "center" }}
+                    error={errors.education}
+                    required
+                    onChange={(e) => handleChange("education", e.target.value)}
+                  >
+                    <MenuItem key={"noEducation"} value={"noEducation"}>
+                      No Formal Education
+                    </MenuItem>
+                    <MenuItem key={"elementry"} value={"elementry"}>
+                      Elementry School
+                    </MenuItem>
+                    <MenuItem key={"highschool"} value={"highschool"}>
+                      High School
+                    </MenuItem>
+                    <MenuItem key={"university"} value={"university"}>
+                      University
+                    </MenuItem>
+                    <MenuItem key={"masters"} value={"masters"}>
+                      Masters
+                    </MenuItem>
+                    <MenuItem key={"phd"} value={"phd"}>
+                      Doctorate/PHD
+                    </MenuItem>
+                  </TextField>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <TextField
+                    id="standard-basic"
+                    label="Birthyear"
+                    helperText="Please enter your birthyear"
+                    style={{ width: "80%", textAlign: "center" }}
+                    error={errors.birthyear}
+                    type="number"
+                    required
+                    onChange={(e) => handleChange("birthyear", e.target.value)}
+                  />
+                </td>
+                <td>
+                  <TextField
+                    id="standard-basic"
+                    label="Caffiene"
+                    type="number"
+                    helperText="Please specify the number of caffiene beverage cups you consumed in the past 24 hours"
+                    style={{ width: "80%", textAlign: "center" }}
+                    onChange={(e) => handleChange("caffiene", e.target.value)}
+                  />
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <TextField
+                    id="static-multiline-static"
+                    multiline
+                    rows={4}
+                    label="Mental Illness"
+                    helperText="Please specify if you have been diagnosed with any mental illness and the type of illness"
+                    style={{ width: "80%", textAlign: "center" }}
+                    onChange={(e) => handleChange("mental", e.target.value)}
+                  />
+                </td>
+                <td>
+                  <TextField
+                    id="static-multiline-static"
+                    label="Medication or General Notes"
+                    multiline
+                    rows={4}
+                    helperText="Please specify if you are currently under any medication or any health related notes that you find relevant"
+                    style={{ width: "80%", textAlign: "center" }}
+                    onChange={(e) => handleChange("notes", e.target.value)}
+                  />
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div
+            style={{
+              textAlign: "right",
+              paddingRight: "18vw",
+              height: "3vw",
+              fontSize: "1vw",
+              color: "#f4132c",
+            }}
+          >
+            * {errors.username ? "hello" : "no"} here
+          </div>
+          <div
+            style={{
+              textAlign: "right",
+              paddingRight: "18vw",
+            }}
+          >
+            <Button variant="outlined" onClick={(e) => submitUser(e)}>
+              Next
+            </Button>
+          </div>
+        </form>
+      </div>
     </div>
   );
 }
