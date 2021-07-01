@@ -18,13 +18,14 @@ function UnityForm(props) {
   const classes = useStyles();
   const setToken = props.setToken;
   const setUsername = props.setUsername;
+  const changeScene = props.changeScene;
 
   const [errorUsername, setErrorUsername] = useState(false);
+  const [errorUnique, setErrorUnique] = useState(false);
   const [errorPassword, setErrorPassword] = useState(false);
   const [errorGender, setErrorGender] = useState(false);
   const [errorEducation, setErrorEducation] = useState(false);
   const [errorBirthyear, setErrorBirthyear] = useState(false);
-  const [errors, setErrors] = useState({});
 
   var data = {};
 
@@ -69,8 +70,11 @@ function UnityForm(props) {
           if (res.data.statusCode === "000") {
             setToken(res.data.token);
             setUsername(res.data.user.username);
+            changeScene();
+          } else if (res.data.statusCode === "005") {
+            setErrorUnique(true);
           } else {
-            console.log(res.data.statusCode);
+            console.log(res.data);
           }
         })
         .catch((err) => console.log(err));
@@ -78,12 +82,24 @@ function UnityForm(props) {
     e.preventDefault();
   }
 
-  // useEffect(() => {
-  //   setErrors(errors);
-  // }, [errors]);
-
   function handleChange(key, value) {
     data[key] = value;
+    if (key === "username") {
+      setErrorUsername(false);
+      setErrorUnique(false);
+    }
+    if (key === "password") {
+      setErrorPassword(false);
+    }
+    if (key === "education") {
+      setErrorEducation(false);
+    }
+    if (key === "gender") {
+      setErrorGender(false);
+    }
+    if (key === "birthyear") {
+      setErrorBirthyear(false);
+    }
   }
 
   return (
@@ -95,7 +111,11 @@ function UnityForm(props) {
           paddingBottom: "2vw",
         }}
       >
-        <form className={classes.root} onSubmit={(e) => submitUser(e)}>
+        <form
+          autocomplete="off"
+          className={classes.root}
+          onSubmit={(e) => submitUser(e)}
+        >
           <table
             style={{
               width: "70%",
@@ -112,7 +132,7 @@ function UnityForm(props) {
                     label="Username"
                     helperText="Please enter a random username and memorize it to use later"
                     style={{ width: "80%", textAlign: "center" }}
-                    error={errorUsername}
+                    error={errorUsername || errorUnique}
                     required
                     defaultValue={data.username}
                     onChange={(e) => handleChange("username", e.target.value)}
@@ -125,7 +145,7 @@ function UnityForm(props) {
                     type="password"
                     helperText="Please enter a random/trivial password and memorize it to use later"
                     style={{ width: "80%", textAlign: "center" }}
-                    error={errors.password ? true : false}
+                    error={errorPassword}
                     required
                     onChange={(e) => handleChange("password", e.target.value)}
                   />
@@ -139,7 +159,7 @@ function UnityForm(props) {
                     label="Gender"
                     helperText="Please select your gender"
                     style={{ width: "80%", textAlign: "center" }}
-                    error={errors.gender}
+                    error={errorGender}
                     required
                     onChange={(e) => handleChange("gender", e.target.value)}
                   >
@@ -161,7 +181,7 @@ function UnityForm(props) {
                     label="Educational Level"
                     helperText="Please select your educational level"
                     style={{ width: "80%", textAlign: "center" }}
-                    error={errors.education}
+                    error={errorEducation}
                     required
                     onChange={(e) => handleChange("education", e.target.value)}
                   >
@@ -193,7 +213,7 @@ function UnityForm(props) {
                     label="Birthyear"
                     helperText="Please enter your birthyear"
                     style={{ width: "80%", textAlign: "center" }}
-                    error={errors.birthyear}
+                    error={errorBirthyear}
                     type="number"
                     required
                     onChange={(e) => handleChange("birthyear", e.target.value)}
@@ -243,9 +263,19 @@ function UnityForm(props) {
               height: "3vw",
               fontSize: "1vw",
               color: "#f4132c",
+              fontFamily: "Roboto",
+              fontWeight: "300",
             }}
           >
-            * {errors.username ? "hello" : "no"} here
+            {errorBirthyear ||
+            errorEducation ||
+            errorGender ||
+            errorUsername ||
+            errorPassword
+              ? "*please fill in the required fields"
+              : errorUnique
+              ? "*this username is already taken"
+              : null}
           </div>
           <div
             style={{

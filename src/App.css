@@ -30,12 +30,12 @@
 
 .MuiInputBase-input {
   font-size: 1.4vw !important;
-  color: white !important;
+  color: #f2f2f2 !important;
 }
 
 .MuiInputLabel-formControl {
   font-size: 1.4vw !important;
-  color: white !important;
+  color: #f2f2f2 !important;
 }
 
 .MuiFormHelperText-root {
@@ -64,13 +64,22 @@
 }
 
 .MuiButton-outlined {
-  border: 1px solid white !important;
+  border: 1px solid #f2f2f2 !important;
   padding: 0.8vw 3vw !important;
 }
 
 .MuiButton-label {
-  color: white;
+  color: #f2f2f2;
   font-size: 1.2vw;
+}
+
+a {
+  color: #203904;
+}
+
+h4 {
+  margin-top: 1.5vw;
+  margin-bottom: 0vw;
 }
 @keyframes App-logo-spin {
   from {
