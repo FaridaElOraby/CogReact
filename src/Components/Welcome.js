@@ -20,8 +20,8 @@ export default function Welcome() {
     <div>
       <div
         style={{
-          paddingTop: "30vw",
-          paddingBottom: "5vw",
+          paddingTop: "25vw",
+          paddingBottom: "7vw",
           margin: "0px",
           backgroundImage: `url(${topImage})`,
           backgroundRepeat: "no-repeat",
@@ -57,6 +57,19 @@ export default function Welcome() {
         >
           REVAMP JOY!
         </h1>
+        <div
+          style={{
+            textAlign: "left",
+            height: "60px",
+            paddingLeft: "7vw",
+            paddingTop: "1vw",
+          }}
+        >
+          <img
+            src="https://img.icons8.com/ios-glyphs/90/f2f2f2/down--v1.png"
+            alt=""
+          />
+        </div>
       </div>
       <div
         style={{

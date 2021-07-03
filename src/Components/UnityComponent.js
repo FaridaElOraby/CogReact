@@ -4,10 +4,10 @@ import axios from "axios";
 import { backendLink } from "../keys";
 
 const unityContext = new UnityContext({
-  loaderUrl: "build/Build28June2.loader.js",
-  dataUrl: "build/Build28June2.data",
-  frameworkUrl: "build/Build28June2.framework.js",
-  codeUrl: "build/Build28June2.wasm",
+  loaderUrl: "build/Build3July.loader.js",
+  dataUrl: "build/Build3July.data",
+  frameworkUrl: "build/Build3July.framework.js",
+  codeUrl: "build/Build3July.wasm",
   productName: "Joy Game",
   productVersion: "1.0.0",
   companyName: "Farida ElOraby",
@@ -203,7 +203,7 @@ function UnityComponent(props) {
         .catch((err) => console.log(err));
     });
     ////////////////////////////////////////////////////////////////////////////
-    unityContext.on("LogLink", function (action, timeStamp, type, scene) {
+    unityContext.on("LogsLink", function (action, timeStamp, type, scene) {
       axios({
         method: "POST",
         url: `${backendLink}/log/addRecord`,
@@ -221,6 +221,27 @@ function UnityComponent(props) {
         .then((res) => {
           if (res.data.statusCode === "000") {
             console.log("log");
+          } else {
+            console.log(res.data);
+          }
+        })
+        .catch((err) => console.log(err));
+    });
+    ////////////////////////////////////////////////////////////////////////////
+    unityContext.on("GameOverLink", function () {
+      axios({
+        method: "POST",
+        url: `${backendLink}/user/validateUser`,
+        headers: {
+          Authorization: token,
+        },
+        data: {
+          username: username,
+        },
+      })
+        .then((res) => {
+          if (res.data.statusCode === "000") {
+            console.log("gameover");
           } else {
             console.log(res.data);
           }

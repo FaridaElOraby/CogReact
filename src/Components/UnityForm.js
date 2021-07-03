@@ -26,24 +26,36 @@ function UnityForm(props) {
   const [errorGender, setErrorGender] = useState(false);
   const [errorEducation, setErrorEducation] = useState(false);
   const [errorBirthyear, setErrorBirthyear] = useState(false);
-
-  var data = {};
+  const [data, setData] = useState({});
 
   function submitUser(e) {
+    e.preventDefault();
     if (!data.username) {
       setErrorUsername(true);
+      setErrorUnique(true);
+    } else {
+      setErrorUsername(false);
+      setErrorUnique(false);
     }
     if (!data.password) {
       setErrorPassword(true);
+    } else {
+      setErrorPassword(false);
     }
     if (!data.gender) {
       setErrorGender(true);
+    } else {
+      setErrorGender(false);
     }
     if (!data.birthyear) {
       setErrorBirthyear(true);
+    } else {
+      setErrorBirthyear(false);
     }
     if (!data.education) {
       setErrorEducation(true);
+    } else {
+      setErrorEducation(false);
     }
     if (
       data.username &&
@@ -52,19 +64,27 @@ function UnityForm(props) {
       data.birthyear &&
       data.education
     ) {
+      const sendData = {
+        gender: data.gender,
+        birthYear: data.birthyear,
+        educationalLevel: data.education,
+        username: data.username,
+        password: data.password,
+      };
+      if (data.mental) {
+        sendData.mentalIllness = data.mental;
+      }
+      if (data.notes) {
+        sendData.notes = data.notes;
+      }
+      if (data.caffiene) {
+        sendData.caffiene = data.caffiene;
+      }
+      console.log(sendData);
       axios({
         method: "POST",
         url: `${backendLink}/user/addUser`,
-        data: {
-          gender: data.gender,
-          birthYear: data.birthyear,
-          educationalLevel: data.education,
-          mentalIllness: data.mental,
-          notes: data.notes,
-          username: data.username,
-          password: data.password,
-          caffiene: data.caffiene,
-        },
+        data: sendData,
       })
         .then((res) => {
           if (res.data.statusCode === "000") {
@@ -83,7 +103,11 @@ function UnityForm(props) {
   }
 
   function handleChange(key, value) {
-    data[key] = value;
+    console.log(data);
+    if (value) {
+      data[key] = value;
+      setData(data);
+    }
     if (key === "username") {
       setErrorUsername(false);
       setErrorUnique(false);
@@ -111,11 +135,7 @@ function UnityForm(props) {
           paddingBottom: "2vw",
         }}
       >
-        <form
-          autocomplete="off"
-          className={classes.root}
-          onSubmit={(e) => submitUser(e)}
-        >
+        <form autocomplete="off" className={classes.root}>
           <table
             style={{
               width: "70%",
@@ -147,6 +167,7 @@ function UnityForm(props) {
                     style={{ width: "80%", textAlign: "center" }}
                     error={errorPassword}
                     required
+                    defaultValue={data.password}
                     onChange={(e) => handleChange("password", e.target.value)}
                   />
                 </td>
@@ -161,6 +182,7 @@ function UnityForm(props) {
                     style={{ width: "80%", textAlign: "center" }}
                     error={errorGender}
                     required
+                    defaultValue={data.gender}
                     onChange={(e) => handleChange("gender", e.target.value)}
                   >
                     <MenuItem key={"female"} value={"female"}>
@@ -169,7 +191,7 @@ function UnityForm(props) {
                     <MenuItem key={"male"} value={"male"}>
                       Male
                     </MenuItem>
-                    <MenuItem key={"other"} value={"perfer not to disclose"}>
+                    <MenuItem key={"none"} value={"none"}>
                       Prefer Not To Disclose
                     </MenuItem>
                   </TextField>
@@ -183,6 +205,7 @@ function UnityForm(props) {
                     style={{ width: "80%", textAlign: "center" }}
                     error={errorEducation}
                     required
+                    defaultValue={data.education}
                     onChange={(e) => handleChange("education", e.target.value)}
                   >
                     <MenuItem key={"noEducation"} value={"noEducation"}>
@@ -216,6 +239,7 @@ function UnityForm(props) {
                     error={errorBirthyear}
                     type="number"
                     required
+                    defaultValue={data.birthyear}
                     onChange={(e) => handleChange("birthyear", e.target.value)}
                   />
                 </td>
@@ -227,6 +251,7 @@ function UnityForm(props) {
                     helperText="Please specify the number of caffiene beverage cups you consumed in the past 24 hours"
                     style={{ width: "80%", textAlign: "center" }}
                     onChange={(e) => handleChange("caffiene", e.target.value)}
+                    defaultValue={data.caffiene}
                   />
                 </td>
               </tr>
@@ -240,6 +265,7 @@ function UnityForm(props) {
                     helperText="Please specify if you have been diagnosed with any mental illness and the type of illness"
                     style={{ width: "80%", textAlign: "center" }}
                     onChange={(e) => handleChange("mental", e.target.value)}
+                    defaultValue={data.mental}
                   />
                 </td>
                 <td>
@@ -251,6 +277,7 @@ function UnityForm(props) {
                     helperText="Please specify if you are currently under any medication or any health related notes that you find relevant"
                     style={{ width: "80%", textAlign: "center" }}
                     onChange={(e) => handleChange("notes", e.target.value)}
+                    defaultValue={data.notes}
                   />
                 </td>
               </tr>
