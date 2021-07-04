@@ -4,10 +4,10 @@ import axios from "axios";
 import { backendLink } from "../keys";
 
 const unityContext = new UnityContext({
-  loaderUrl: "build/Build4July.loader.js",
-  dataUrl: "build/Build4July.data",
-  frameworkUrl: "build/Build4July.framework.js",
-  codeUrl: "build/Build4July.wasm",
+  loaderUrl: "build/Build4July2.loader.js",
+  dataUrl: "build/Build4July2.data",
+  frameworkUrl: "build/Build4July2.framework.js",
+  codeUrl: "build/Build4July2.wasm",
   productName: "Joy Game",
   productVersion: "1.0.0",
   companyName: "Farida ElOraby",

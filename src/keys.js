@@ -1,4 +1,4 @@
-const backendLink = "http://localhost:5000";
+const backendLink = "https://db-node-deploy.herokuapp.com";
 
 module.exports = {
   backendLink,
