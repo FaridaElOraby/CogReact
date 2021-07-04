@@ -123,7 +123,7 @@ export default function Welcome() {
                   Your participation is anonymous. Do not write your name on the
                   survey. No one will be able to identify you or your answers,
                   and no one will know whether or not you participated in the
-                  study. The game will take about 30 minutes to complete. Please
+                  study. The game will take about 15 minutes to complete. Please
                   make sure that you are in a quiet and comfortable place before
                   starting playing the game. External distractions may affect
                   the results of this study.

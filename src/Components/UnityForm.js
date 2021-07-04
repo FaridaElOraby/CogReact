@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
 import MenuItem from "@material-ui/core/MenuItem";
@@ -27,6 +27,15 @@ function UnityForm(props) {
   const [errorEducation, setErrorEducation] = useState(false);
   const [errorBirthyear, setErrorBirthyear] = useState(false);
   const [data, setData] = useState({});
+  const [birthOptions, setBirthOptions] = useState([]);
+
+  useEffect(() => {
+    let a = [];
+    for (let i = 1925; i <= 2021; i++) {
+      a.push(i);
+    }
+    setBirthOptions(a);
+  }, []);
 
   function submitUser(e) {
     e.preventDefault();
@@ -66,7 +75,7 @@ function UnityForm(props) {
     ) {
       const sendData = {
         gender: data.gender,
-        birthYear: data.birthyear,
+        birthYear: data.birthyear + "",
         educationalLevel: data.education,
         username: data.username,
         password: data.password,
@@ -149,7 +158,7 @@ function UnityForm(props) {
                 <td>
                   <TextField
                     id="standard-basic"
-                    label="Username"
+                    label="Random Username"
                     helperText="Please enter a random username and memorize it to use later"
                     style={{ width: "80%", textAlign: "center" }}
                     error={errorUsername || errorUnique}
@@ -237,11 +246,19 @@ function UnityForm(props) {
                     helperText="Please enter your birthyear"
                     style={{ width: "80%", textAlign: "center" }}
                     error={errorBirthyear}
-                    type="number"
+                    select
                     required
                     defaultValue={data.birthyear}
                     onChange={(e) => handleChange("birthyear", e.target.value)}
-                  />
+                  >
+                    {birthOptions.map((option) => {
+                      return (
+                        <MenuItem key={option} value={option}>
+                          {option}
+                        </MenuItem>
+                      );
+                    })}
+                  </TextField>
                 </td>
                 <td>
                   <TextField
