@@ -89,7 +89,6 @@ function UnityForm(props) {
       if (data.caffiene) {
         sendData.caffiene = data.caffiene;
       }
-      console.log(sendData);
       axios({
         method: "POST",
         url: `${backendLink}/user/addUser`,
@@ -112,7 +111,6 @@ function UnityForm(props) {
   }
 
   function handleChange(key, value) {
-    console.log(data);
     if (value) {
       data[key] = value;
       setData(data);
