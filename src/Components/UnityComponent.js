@@ -4,10 +4,10 @@ import axios from "axios";
 import { backendLink } from "../keys";
 
 const unityContext = new UnityContext({
-  loaderUrl: "build/Build4July2.loader.js",
-  dataUrl: "build/Build4July2.data",
-  frameworkUrl: "build/Build4July2.framework.js",
-  codeUrl: "build/Build4July2.wasm",
+  loaderUrl: "build/Build5July3.loader.js",
+  dataUrl: "build/Build5July3.data",
+  frameworkUrl: "build/Build5July3.framework.js",
+  codeUrl: "build/Build5July3.wasm",
   productName: "Joy Game",
   productVersion: "1.0.0",
   companyName: "Farida ElOraby",
@@ -283,7 +283,7 @@ function UnityComponent(props) {
           }}
         >
           {progression < 0.1
-            ? `Loading...`
+            ? `Loading  1%...`
             : progression < 1
             ? `Loading  ${Math.round(progression * 100)}%...`
             : `Welcome, ${username}`}
