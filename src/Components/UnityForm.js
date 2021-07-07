@@ -28,6 +28,7 @@ function UnityForm(props) {
   const [errorBirthyear, setErrorBirthyear] = useState(false);
   const [data, setData] = useState({});
   const [birthOptions, setBirthOptions] = useState([]);
+  const [next, setNext] = useState(false);
 
   useEffect(() => {
     let a = [];
@@ -73,6 +74,7 @@ function UnityForm(props) {
       data.birthyear &&
       data.education
     ) {
+      setNext(true);
       const sendData = {
         gender: data.gender,
         birthYear: data.birthyear + "",
@@ -325,9 +327,24 @@ function UnityForm(props) {
               paddingRight: "18vw",
             }}
           >
-            <Button variant="outlined" onClick={(e) => submitUser(e)}>
-              Next
-            </Button>
+            {next ? (
+              <div
+                style={{
+                  textAlign: "right",
+                  fontSize: "2vw",
+                  margin: "0px",
+                  color: "#f2f2f2",
+                  fontFamily: "Roboto",
+                  fontWeight: "300",
+                }}
+              >
+                loading...
+              </div>
+            ) : (
+              <Button variant="outlined" onClick={(e) => submitUser(e)}>
+                Next
+              </Button>
+            )}
           </div>
         </form>
       </div>
