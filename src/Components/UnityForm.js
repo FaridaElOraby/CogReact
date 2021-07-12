@@ -103,6 +103,7 @@ function UnityForm(props) {
             changeScene();
           } else if (res.data.statusCode === "005") {
             setErrorUnique(true);
+            setNext(false);
           } else {
             console.log(res.data);
           }
@@ -263,9 +264,9 @@ function UnityForm(props) {
                 <td>
                   <TextField
                     id="standard-basic"
-                    label="Caffiene"
+                    label="Caffeine"
                     type="number"
-                    helperText="Please specify the number of caffiene beverage cups you consumed in the past 24 hours"
+                    helperText="Please specify the number of caffeine beverage cups you consumed in the past 24 hours"
                     style={{ width: "80%", textAlign: "center" }}
                     onChange={(e) => handleChange("caffiene", e.target.value)}
                     defaultValue={data.caffiene}
